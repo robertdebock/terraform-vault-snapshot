@@ -12,7 +12,6 @@ jobs:
       # These are variables in the "aws-s3" example.
       TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_VAR_
       AWS_REGION: "eu-west-1"
       # These varialbes are for the terraform vault provider.
       VAULT_ADDR: "http://vault:8200"
