@@ -1,0 +1,62 @@
+---
+on:
+  - push
+
+jobs:
+  terraform:
+    name: terraform
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: "eu-west-1"
+      # These varialbes are for the terraform vault provider.
+      VAULT_ADDR: "http://vault:8200"
+      VAULT_TOKEN: "simple"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: default
+          - name: multiple
+      max-parallel: 3
+    services:
+      vault:
+        image: hashicorp/vault-enterprise
+        env:
+          VAULT_DEV_ROOT_TOKEN_ID: "simple"
+          VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
+        ports:
+          - 8200:8201
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: terraform init
+        uses: robertdebock/terraform-action@1.1.2
+        with:
+          directory: ./examples/${{ matrix.config.name }}
+      - name: terraform validate
+        uses: robertdebock/terraform-action@1.1.2
+        with:
+          action: validate
+          directory: ./examples/${{ matrix.config.name }}
+      - name: terraform plan
+        uses: robertdebock/terraform-action@1.1.2
+        with:
+          action: plan
+          directory: ./examples/${{ matrix.config.name }}
+      - name: terraform apply
+        uses: robertdebock/terraform-action@1.1.2
+        with:
+          action: apply
+          directory: ./examples/${{ matrix.config.name }}
+        env:
+          TF_CLI_ARGS: "-input=false -auto-approve"
+      - name: terraform destroy
+        uses: robertdebock/terraform-action@1.1.2
+        with:
+          action: destroy
+          directory: ./examples/${{ matrix.config.name }}
+        env:
+          TF_CLI_ARGS: "-input=false -auto-approve"
+        if: ${{ always() }}
