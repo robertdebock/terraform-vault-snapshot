@@ -8,3 +8,15 @@ variable "snapshot_agent_config" {
     local_max_space  = 10000000
   }]
 }
+
+variable "aws_access_key_id" {
+  description = "Used for aws-s3 snapshots. (optional)"
+  default     = null
+  type        = string
+}
+
+variable "aws_secret_access_key" {
+  description = "Used for aws-s3 snapshots. (optional)"
+  default     = null
+  type        = string
+}

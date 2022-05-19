@@ -6,8 +6,13 @@ jobs:
   terraform:
     name: terraform
     env:
+      # These variables are used to create an s3 bucket in "aws-s3".
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      # These are variables in the "aws-s3" example.
+      TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_
       AWS_REGION: "eu-west-1"
       # These varialbes are for the terraform vault provider.
       VAULT_ADDR: "http://vault:8200"
@@ -19,6 +24,7 @@ jobs:
         config:
           - name: default
           - name: multiple
+          - name: aws-s3
       max-parallel: 3
     services:
       vault:
@@ -45,18 +51,20 @@ jobs:
         with:
           action: plan
           directory: ./examples/${{ matrix.config.name }}
-      - name: terraform apply
-        uses: robertdebock/terraform-action@1.1.2
-        with:
-          action: apply
-          directory: ./examples/${{ matrix.config.name }}
-        env:
-          TF_CLI_ARGS: "-input=false -auto-approve"
-      - name: terraform destroy
-        uses: robertdebock/terraform-action@1.1.2
-        with:
-          action: destroy
-          directory: ./examples/${{ matrix.config.name }}
-        env:
-          TF_CLI_ARGS: "-input=false -auto-approve"
-        if: ${{ always() }}
+      # Can't apply; the vault container does not use raft:
+      # `* raft storage is not in use`.
+      # - name: terraform apply
+      #   uses: robertdebock/terraform-action@1.1.2
+      #   with:
+      #     action: apply
+      #     directory: ./examples/${{ matrix.config.name }}
+      #   env:
+      #     TF_CLI_ARGS: "-input=false -auto-approve"
+      # - name: terraform destroy
+      #   uses: robertdebock/terraform-action@1.1.2
+      #   with:
+      #     action: destroy
+      #     directory: ./examples/${{ matrix.config.name }}
+      #   env:
+      #     TF_CLI_ARGS: "-input=false -auto-approve"
+      #   if: ${{ always() }}
