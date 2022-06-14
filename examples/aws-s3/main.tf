@@ -1,11 +1,11 @@
-# The s3 snapshot needs AWS access.
+# The s3 snapshot needs AWS access id.
 variable "aws_access_key_id" {
   description = "Used for aws-s3 snapshots. (optional)"
   default     = null
   type        = string
 }
 
-# The s3 snapshot needs AWS access.
+# The s3 snapshot needs AWS secret key.
 variable "aws_secret_access_key" {
   description = "Used for aws-s3 snapshots. (optional)"
   default     = null
