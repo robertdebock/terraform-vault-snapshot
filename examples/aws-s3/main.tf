@@ -23,7 +23,7 @@ resource "random_string" "default" {
 resource "aws_s3_bucket" "default" {
   bucket = "my-vault-snapshots-${random_string.default.result}"
   tags = {
-    owner        = "robertdebock"
+    owner = "robertdebock"
   }
 }
 

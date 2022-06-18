@@ -15,7 +15,7 @@ variable "aws_access_key_id" {
   type        = string
   validation {
     condition     = can(regex("^A..................Q$", var.aws_access_key_id)) || var.aws_access_key_id == null
-    error_message = "Please use a valid access key."
+    error_message = "When specifying an access key, please use the correct format."
   }
 }
 
@@ -24,7 +24,7 @@ variable "aws_secret_access_key" {
   default     = null
   type        = string
   validation {
-    condition     = length(var.aws_secret_access_key) == 40
-    error_message = "Please use a key of 40 bytes long."
+    condition     = length(var.aws_secret_access_key) == 40 | var.aws_secret_access_key == null
+    error_message = "When specifying a secret key, please use the correct format."
   }
 }
