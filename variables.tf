@@ -24,7 +24,7 @@ variable "aws_secret_access_key" {
   default     = null
   type        = string
   validation {
-    condition     = length(var.aws_secret_access_key) == 40 | var.aws_secret_access_key == null
+    condition     = length(var.aws_secret_access_key) == 40 || var.aws_secret_access_key == null
     error_message = "When specifying a secret key, please use the correct format."
   }
 }
