@@ -48,6 +48,12 @@ jobs:
         with:
           action: validate
           directory: ./examples/${{ matrix.config.name }}
+      - name: debug
+        steps:
+          - run: "nslookup google.com"
+          - run: "nslookup vault"
+          - run: "ping -c 3 vault"
+          - run: "cat /etc/resolv.conf"
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
