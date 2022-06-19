@@ -34,7 +34,8 @@ jobs:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
           VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
         ports:
-          - 8200:8201
+          - 8200:8200
+          - 8201:8201
     steps:
       - name: checkout
         uses: actions/checkout@v2
