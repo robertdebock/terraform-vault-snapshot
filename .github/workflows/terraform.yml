@@ -36,9 +36,6 @@ jobs:
         ports:
           - 8200:8200
     steps:
-      - name: check container 1
-        run: docker ps
-        if: ${{ always() }}
       - name: checkout
         uses: actions/checkout@v3
       - name: terraform init
@@ -50,8 +47,6 @@ jobs:
         with:
           action: validate
           directory: ./examples/${{ matrix.config.name }}
-      - name: health check
-        run: curl ${VAULT_ADDR}/v1/sys/health || echo "failed"
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
@@ -72,7 +67,8 @@ jobs:
         if: ${{ always() }}
         env:
           TF_CLI_ARGS: "-input=false -auto-approve"
-      - name: check container 2
+      - name: check container logs
         run: 'docker logs $(docker ps -aql)'
-        if: ${{ always() }}
+        if: ${{ failure() }}
+
 
