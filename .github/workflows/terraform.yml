@@ -32,7 +32,7 @@ jobs:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
           VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
           # VAULT_LOCAL_CONFIG: '{"disable_mlock": true, "backend": {"file": {"path": "/vault/file"}}'
-          VAULT_LOCAL_CONFIG: '{"disable_mlock": true, "storage": {"raft": {"path": "/vault/raft", "node_id": "raft_node_1"}, "cluster_addr": "http://127.0.0.1:8201"}'
+          VAULT_LOCAL_CONFIG: '{"disable_mlock": true, "backend": {"raft": {"path": "/vault/raft", "node_id": "raft_node_1"}, "cluster_addr": "http://127.0.0.1:8201"}'
         ports:
           - 8200:8200
     steps:
