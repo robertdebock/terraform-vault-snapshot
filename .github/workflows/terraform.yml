@@ -35,6 +35,9 @@ jobs:
         ports:
           - 8200:8200
     steps:
+      - name: check container 1
+        run: docker ps
+        if: ${{ always() }}
       - name: checkout
         uses: actions/checkout@v3
       - name: terraform init
@@ -68,7 +71,7 @@ jobs:
         if: ${{ always() }}
         env:
           TF_CLI_ARGS: "-input=false -auto-approve"
-      - name: check container
+      - name: check container 2
         run: docker ps
         if: ${{ always() }}
 
