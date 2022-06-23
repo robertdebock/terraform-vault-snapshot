@@ -14,21 +14,21 @@ jobs:
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: "eu-west-1"
       # These variables are for the terraform vault provider.
-      VAULT_ADDR: "http://vault:8200"
+      VAULT_ADDR: "http://vault-ent:8200"
       VAULT_TOKEN: "simple"
       # The Docker container picks up this config.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
     runs-on: ubuntu-22.04
     strategy:
-      # fail-fast: false
+      fail-fast: false
       matrix:
         config:
           - name: default
           - name: multiple
           - name: aws-s3
-      max-parallel: 1
+      max-parallel: 3
     services:
-      vault:
+      vault-ent:
         image: hashicorp/vault-enterprise
         env:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
@@ -47,15 +47,8 @@ jobs:
         with:
           action: validate
           directory: ./examples/${{ matrix.config.name }}
-      - name: debug
-        run: |
-          resolvectl status || echo "failed" 
-          nslookup vault || echo "failed"
-          ping -c 3 vault || echo "failed"
-          curl ${VAULT_ADDR}/v1/sys/health || echo "failed"
-          uptime || echo "failed"
-          df -k || echo "failed"
-          ip addr sh || echo "failed"
+      - name: health check
+        run: curl ${VAULT_ADDR}/v1/sys/health || echo "failed"
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
