@@ -18,7 +18,7 @@ jobs:
       VAULT_TOKEN: "simple"
       # Untested; use raft.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-18.04
     strategy:
       fail-fast: false
       matrix:
