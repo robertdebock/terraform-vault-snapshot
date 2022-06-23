@@ -52,6 +52,7 @@ jobs:
           resolvectl status || echo "failed" 
           nslookup vault || echo "failed"
           ping -c 3 vault || echo "failed"
+          curl ${VAULT_ADDR}/v1/sys/health || echo "failed"
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
