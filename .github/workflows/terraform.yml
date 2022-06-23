@@ -16,9 +16,9 @@ jobs:
       # These variables are for the terraform vault provider.
       VAULT_ADDR: "http://vault:8200"
       VAULT_TOKEN: "simple"
-      # Untested; use raft.
+      # The Docker container picks up this config.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -49,9 +49,9 @@ jobs:
           directory: ./examples/${{ matrix.config.name }}
       - name: debug
         run: |
-          resolvectl status || exit 0
-          nslookup vault || exit 0
-          ping -c 3 vault || exit 0
+          resolvectl status || echo "failed" 
+          nslookup vault || echo "failed"
+          ping -c 3 vault || echo "failed"
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
