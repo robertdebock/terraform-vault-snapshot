@@ -19,7 +19,7 @@ jobs:
       # Untested; use raft.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -36,7 +36,6 @@ jobs:
           VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
         ports:
           - 8200:8200
-          - 8201:8201
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -51,10 +50,10 @@ jobs:
           directory: ./examples/${{ matrix.config.name }}
       - name: debug
         run: |
-          nslookup google.com
-          nslookup vault
-          ping -c 3 vault
-          cat /etc/resolv.conf
+          cat /etc/resolv.conf || exit 0
+          nslookup google.com || exit 0
+          nslookup vault || exit 0
+          ping -c 3 vault || exit 0
       - name: terraform plan
         uses: robertdebock/terraform-action@1.1.2
         with:
