@@ -29,7 +29,8 @@ jobs:
       max-parallel: 3
     services:
       vault:
-        image: hashicorp/vault-enterprise
+        # image: hashicorp/vault-enterprise
+        image: vault
         env:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
           VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
