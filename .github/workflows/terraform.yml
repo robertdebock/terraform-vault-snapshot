@@ -14,7 +14,8 @@ jobs:
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: "eu-west-1"
       # These variables are for the terraform vault provider.
-      VAULT_ADDR: "http://vaultent:8200"
+      # VAULT_ADDR: "http://vault:8200"
+      VAULT_ADDR: "http://127.0.0.1:8200"
       VAULT_TOKEN: "simple"
       # The Docker container picks up this config.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
@@ -28,7 +29,7 @@ jobs:
           - name: aws-s3
       max-parallel: 3
     services:
-      vaultent:
+      vault:
         image: hashicorp/vault-enterprise
         env:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
