@@ -51,6 +51,7 @@ jobs:
       - name: debug
         run: |
           cat /etc/resolv.conf || exit 0
+          resolvectl status || exit 0
           nslookup google.com || exit 0
           nslookup vault || exit 0
           ping -c 3 vault || exit 0
