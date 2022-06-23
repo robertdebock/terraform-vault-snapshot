@@ -20,13 +20,13 @@ jobs:
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
     runs-on: ubuntu-22.04
     strategy:
-      fail-fast: false
+      # fail-fast: false
       matrix:
         config:
           - name: default
           - name: multiple
           - name: aws-s3
-      max-parallel: 3
+      max-parallel: 1
     services:
       vault:
         image: hashicorp/vault-enterprise
