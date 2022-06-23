@@ -18,8 +18,7 @@ jobs:
       VAULT_TOKEN: "simple"
       # Untested; use raft.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
-
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -38,7 +37,7 @@ jobs:
           - 8200:8200
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: terraform init
         uses: robertdebock/terraform-action@1.1.2
         with:
