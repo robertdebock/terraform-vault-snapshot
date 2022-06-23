@@ -16,8 +16,6 @@ jobs:
       # These variables are for the terraform vault provider.
       VAULT_ADDR: "http://vault:8200"
       VAULT_TOKEN: "simple"
-      # The Docker container picks up this config.
-      VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
@@ -29,11 +27,11 @@ jobs:
       max-parallel: 3
     services:
       vault:
-        # image: hashicorp/vault-enterprise
-        image: vault
+        image: hashicorp/vault-enterprise
         env:
           VAULT_DEV_ROOT_TOKEN_ID: "simple"
           VAULT_LICENSE: "${{ secrets.VAULT_LICENSE }}"
+          VAULT_LOCAL_CONFIG: '{"disable_mlock": true, "backend": {"file": {"path": "/vault/file"}}'
         ports:
           - 8200:8200
     steps:
