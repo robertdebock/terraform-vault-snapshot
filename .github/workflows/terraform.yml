@@ -68,3 +68,7 @@ jobs:
         if: ${{ always() }}
         env:
           TF_CLI_ARGS: "-input=false -auto-approve"
+      - name: check container
+        run: docker ps
+        if: ${{ always() }}
+
