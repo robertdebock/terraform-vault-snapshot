@@ -18,7 +18,6 @@ jobs:
       VAULT_TOKEN: "simple"
       # Untested; use raft.
       VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
-      TF_CLI_ARGS: "-input=false -auto-approve"
 
     runs-on: ubuntu-22.04
     strategy:
@@ -66,9 +65,13 @@ jobs:
         with:
           action: apply
           directory: ./examples/${{ matrix.config.name }}
+        env:
+          TF_CLI_ARGS: "-input=false -auto-approve"
       - name: terraform destroy
         uses: robertdebock/terraform-action@1.1.2
         with:
           action: destroy
           directory: ./examples/${{ matrix.config.name }}
         if: ${{ always() }}
+        env:
+          TF_CLI_ARGS: "-input=false -auto-approve"
