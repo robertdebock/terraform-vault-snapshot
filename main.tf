@@ -10,21 +10,21 @@ resource "vault_raft_snapshot_agent_config" "default" {
   aws_s3_region         = try(var.snapshot_agent_config[count.index].aws_s3_region, null)
   aws_access_key_id     = try(var.aws_access_key_id, null)
   aws_secret_access_key = try(var.aws_secret_access_key, null)
-  aws_s3_enable_kms     = true
+  aws_s3_enable_kms     = try(var.aws_s3_enable_kms, null)
+  azure_container_name  = try(var.azure_container_name, null)
+  azure_account_name    = try(var.azure_account_name, null)
+  azure_account_key     = try(var.azure_account_key, null)
 }
 
+/* resource "vault_raft_snapshot_agent_config" "azure_backups" {
+  name             = "azure_backup"
+  interval_seconds = 86400 # 24h
+  retain           = 7
+  path_prefix      = "/"
+  storage_type     = "azure-blob"
 
-# resource "vault_raft_snapshot_agent_config" "s3_backups" {
-#   name             = "s3"
-#   interval_seconds = 86400 # 24h
-#   retain           = 7
-#   path_prefix      = "/path/in/bucket"
-#   storage_type     = "aws-s3"
-#
-#   # Storage Type Configuration
-#   aws_s3_bucket         = "my-bucket"
-#   aws_s3_region         = data.aws_region.current.name
-#   aws_access_key_id     = var.aws_access_key_id
-#   aws_secret_access_key = var.aws_secret_access_key
-#   aws_s3_enable_kms     = true
-# }
+  # Storage Type Configuration
+  azure_container_name = "vault-blob"
+  azure_account_name   = var.azure_account_name
+  azure_account_key    = var.azure_account_key
+} */
